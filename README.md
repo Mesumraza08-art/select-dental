@@ -175,55 +175,39 @@ The site runs in **preview mode** until you switch it off. In preview mode, miss
 
 ## Part 4: Put the website online (Hostinger)
 
-The site is built as plain HTML, CSS and JavaScript (a "static export"), so it runs on any Hostinger plan, including basic shared hosting. No Node.js server is needed on Hostinger.
+The site runs on Hostinger as a Node.js web app, built straight from the `main` branch on GitHub.
 
-### How it works
+### Step 1. Import from GitHub
 
-1. Code is pushed to the `main` branch on GitHub.
-2. A GitHub Action (`.github/workflows/hostinger.yml`) builds the site and puts the finished files on a branch called `hostinger`.
-3. Hostinger pulls the `hostinger` branch into `public_html`.
+1. In hPanel, add a Node.js web app and choose **Import from GitHub**, then pick `select-dental`.
+2. Leave the defaults: Framework preset **Next.js**, Branch **main**, Root directory `./`, Build and output settings **Default for Next.js**. Choose Node **22.x** if offered (20.x also works).
+3. Click **Deploy**. Every push to `main` after that redeploys the site.
 
-`public/.htaccess` is included in the build. It forces HTTPS, serves the custom 404 page, adds security headers and sets caching.
+### Settings
 
-### Step 1. Set the environment variables on GitHub
-
-On GitHub open the repository, then **Settings**, **Secrets and variables**, **Actions**, the **Variables** tab, and add:
+The site's settings live in `.env.production` in this project. Edit that file and push, or set the same name in Hostinger's **Environment variables** panel (Hostinger's value wins), then redeploy.
 
 | Name | Preview / review | Launch day |
 | --- | --- | --- |
-| `NEXT_PUBLIC_SITE_URL` | your Hostinger address | `https://www.yourdomain.ca` |
+| `NEXT_PUBLIC_SITE_URL` | your hostingersite.com address | `https://www.yourdomain.ca` |
 | `NEXT_PUBLIC_PREVIEW_PLACEHOLDERS` | `true` | `false` |
 | `NEXT_PUBLIC_ALLOW_INDEXING` | `false` | `true` |
 | `NEXT_PUBLIC_GA_ID` | leave empty | your GA4 ID, for example `G-XXXXXXX` |
 | `NEXT_PUBLIC_BOOKING_ENDPOINT` | leave empty | address from your booking system |
 
-These values are baked in when the site is built. After changing one, open the **Actions** tab, choose **Build for Hostinger**, and click **Run workflow**.
+To use different settings on your own computer, create a file called `.env.local` with the names above.
 
-To run the site on your own computer with these settings, copy `.env.example` to a new file called `.env.local` and fill it in.
+### Step 2. Add your domain
 
-### Step 2. Connect Hostinger to GitHub
-
-1. Wait for the first **Build for Hostinger** run in the **Actions** tab to finish (green tick). This creates the `hostinger` branch.
-2. In Hostinger hPanel open your website, then **Advanced**, then **Git**.
-3. Repository: `https://github.com/Mesumraza08-art/select-dental.git`, Branch: `hostinger`, Install path: leave empty (deploys to `public_html`). `public_html` must be empty first.
-4. If the repository is private, copy the SSH key Hostinger shows and add it on GitHub under **Settings**, **Deploy keys**.
-5. Click **Create**, then **Deploy**.
-6. For automatic updates, turn on **Auto deployment** in Hostinger and add the webhook URL it gives you on GitHub under **Settings**, **Webhooks** (content type `application/json`, event: push).
-
-### Manual upload (alternative)
-
-Run `npm run build` on your computer, then upload everything inside the `out` folder (including the hidden `.htaccess` file) to `public_html` with Hostinger's **File Manager** or FTP.
-
-### Step 3. Add your domain
-
-In hPanel, point the domain at this website and turn on the free SSL certificate under **Security**, **SSL**.
+In hPanel, connect your domain to the web app and turn on the free SSL certificate.
 
 ### Launch day
 
-1. Set `NEXT_PUBLIC_PREVIEW_PLACEHOLDERS` to `false`.
-2. Set `NEXT_PUBLIC_ALLOW_INDEXING` to `true`.
-3. Run the **Build for Hostinger** workflow again (and deploy in Hostinger if auto deployment is off).
-4. Submit `https://www.yourdomain.ca/sitemap.xml` in Google Search Console.
+1. Set `NEXT_PUBLIC_SITE_URL` to your real domain.
+2. Set `NEXT_PUBLIC_PREVIEW_PLACEHOLDERS` to `false`.
+3. Set `NEXT_PUBLIC_ALLOW_INDEXING` to `true`.
+4. Redeploy.
+5. Submit `https://www.yourdomain.ca/sitemap.xml` in Google Search Console.
 
 ---
 
