@@ -1,0 +1,21 @@
+1:"$Sreact.fragment"
+2:I[22016,["/_next/static/chunks/1m2bmgeke-mlq.js","/_next/static/chunks/1cuy6huhosbmx.js","/_next/static/chunks/1p_zlawx2rfg9.js","/_next/static/chunks/1sfnfsrkcbdmm.js"],""]
+3:I[97367,["/_next/static/chunks/1m2bmgeke-mlq.js","/_next/static/chunks/1cuy6huhosbmx.js","/_next/static/chunks/1p_zlawx2rfg9.js","/_next/static/chunks/1sfnfsrkcbdmm.js"],"OutletBoundary"]
+4:"$Sreact.suspense"
+8:I[97367,["/_next/static/chunks/1m2bmgeke-mlq.js","/_next/static/chunks/1cuy6huhosbmx.js","/_next/static/chunks/1p_zlawx2rfg9.js","/_next/static/chunks/1sfnfsrkcbdmm.js"],"ViewportBoundary"]
+9:I[97367,["/_next/static/chunks/1m2bmgeke-mlq.js","/_next/static/chunks/1cuy6huhosbmx.js","/_next/static/chunks/1p_zlawx2rfg9.js","/_next/static/chunks/1sfnfsrkcbdmm.js"],"MetadataBoundary"]
+a:I[27201,["/_next/static/chunks/1m2bmgeke-mlq.js","/_next/static/chunks/1cuy6huhosbmx.js","/_next/static/chunks/1p_zlawx2rfg9.js","/_next/static/chunks/1sfnfsrkcbdmm.js"],"IconMark"]
+c:I[39756,["/_next/static/chunks/1m2bmgeke-mlq.js","/_next/static/chunks/1cuy6huhosbmx.js","/_next/static/chunks/1p_zlawx2rfg9.js","/_next/static/chunks/1sfnfsrkcbdmm.js"],"default"]
+d:I[37457,["/_next/static/chunks/1m2bmgeke-mlq.js","/_next/static/chunks/1cuy6huhosbmx.js","/_next/static/chunks/1p_zlawx2rfg9.js","/_next/static/chunks/1sfnfsrkcbdmm.js"],"default"]
+7:X
+f:X
+f:C
+0:{"buildId":"gROd5C4Ie3OJ4HstRwCCW","data":[{"rsc":["$","$1","c",{"children":[["$","section",null,{"className":"flex min-h-[78vh] items-center pt-[var(--header-h)]","children":["$","div",null,{"className":"container-x py-24 text-center","children":[["$","svg",null,{"viewBox":"0 0 120 24","className":" mx-auto h-8 w-40 text-smile","aria-hidden":"true","focusable":"false","children":["$","path",null,{"d":"M3 4 Q60 40 117 4","pathLength":1,"fill":"none","stroke":"currentColor","strokeWidth":3,"strokeLinecap":"round"}]}],["$","h1",null,{"className":"display mx-auto mt-10 max-w-[14ch]","children":"This page may have lost its way."}],["$","p",null,{"className":"lede mx-auto mt-6 max-w-[34ch]","children":"Let's get you back to your smile."}],["$","div",null,{"className":"mt-10 flex flex-wrap justify-center gap-3","children":[["$","$L2",null,{"href":"/","className":"btn btn-primary  ","children":["Go home","$undefined"]}],["$","$L2",null,{"href":"/book-appointment","className":"btn btn-secondary  ","data-track":"book_click","children":["Book appointment","$undefined"]}]]}]]}]}],null,["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"isPartial":"$@6","staleTime":"$7","varyParams":null},{"rsc":["$","$1","h",{"children":[["$","meta",null,{"name":"robots","content":"noindex"}],["$","$L8",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","2",{"name":"theme-color","content":"#ffffff"}]]}],["$","div",null,{"hidden":true,"children":["$","$L9",null,{"children":["$","$4",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Page not found | Select Dental"}],["$","meta","1",{"name":"description","content":"Thoughtful, modern dental care for every stage of your smile at Select Dental, 215 Select Ave, Scarborough, Ontario."}],["$","meta","2",{"name":"application-name","content":"Select Dental"}],["$","meta","3",{"name":"robots","content":"noindex, follow"}],["$","meta","4",{"name":"format-detection","content":"telephone=no"}],["$","link","5",{"rel":"icon","href":"/icon.png?icon.3t8zh3w0xfc-m.png","sizes":"512x512","type":"image/png"}],["$","link","6",{"rel":"apple-touch-icon","href":"/apple-icon.png?apple-icon.366xtct--toq7.png","sizes":"180x180","type":"image/png"}],["$","$La","7",{}]]}]}]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"isPartial":"$@b","staleTime":"$7","varyParams":null},{"rsc":["$","$1","c",{"children":[null,["$","$Lc",null,{"parallelRouterKey":"children","template":["$","$Ld",null,{}]}]]}],"isPartial":"$@e","staleTime":"$7","varyParams":"$f"}],"isUpgradeableISRFallback":false,"a":"$@10","rootVaryParams":null,"needsRuntimeRequest":"$@11"}
+5:null
+11:true
+7:300
+7:C
+10:0
+b:"$undefined"
+e:"$undefined"
+6:"$undefined"
