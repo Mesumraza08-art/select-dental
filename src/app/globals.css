@@ -1,0 +1,811 @@
+@import "tailwindcss";
+
+/* ==================================================================
+   Select Dental design system v2
+   Colours sampled from the supplied logo. Editorial type scale.
+   ================================================================== */
+@theme {
+  --color-navy: #1b396b;
+  --color-navy-deep: #122a52;
+  --color-navy-ink: #0d1f3f;
+  --color-smile: #6ec1ec;
+  --color-smile-deep: #3a9fd6;
+  --color-smile-soft: #e6f3fb;
+  --color-smile-mist: #f1f8fd;
+  --color-mist: #f5f7f9;
+  --color-sand: #f6f3ee;
+  --color-ink: #16202e;
+  --color-muted: #566476;
+  --color-line: #e1e7ee;
+  --color-line-strong: #c9d3de;
+
+  --font-display: var(--font-jakarta), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-calm: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-settle: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --breakpoint-xs: 26rem;
+}
+
+:root {
+  --pad: clamp(1.25rem, 0.5rem + 3.2vw, 3.5rem);
+  --header-h: 80px;
+  --radius-media: 22px;
+  --radius-ui: 999px;
+  --radius-card: 18px;
+  --section-y: clamp(5rem, 3rem + 7vw, 10rem);
+  --max: 1360px;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--header-h) + 16px);
+}
+
+body {
+  overflow-x: clip;
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  background: #fff;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: var(--color-smile-soft);
+  color: var(--color-navy-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-navy);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+.on-dark :focus-visible {
+  outline-color: #fff;
+}
+
+/* ------------------------------------------------------------------
+   Logo intro states (set before first paint by an inline script)
+   ------------------------------------------------------------------ */
+.intro-layer {
+  display: none;
+}
+html[data-intro="play"] .intro-layer,
+html[data-intro="fading"] .intro-layer {
+  display: flex;
+}
+html[data-intro="play"] body,
+html[data-intro="fading"] body {
+  overflow: hidden;
+}
+html[data-intro="play"] .header-logo,
+html[data-intro="fading"] .header-logo {
+  opacity: 0;
+}
+main {
+  transition: transform 1100ms var(--ease-out), opacity 700ms var(--ease-out);
+}
+html[data-intro="play"] main {
+  transform: scale(0.985);
+  opacity: 0;
+}
+
+/* Page transition: soft fade, slight lift and blur reduction */
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+.page-enter {
+  animation: page-in 420ms var(--ease-out) both;
+}
+
+/* ------------------------------------------------------------------
+   Scroll motion system. Elements opt in with data-anim; the observer
+   adds .in when they enter the viewport. Without JS everything shows.
+   ------------------------------------------------------------------ */
+html.js [data-anim="fade"] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 900ms var(--ease-out), transform 1100ms var(--ease-out);
+  transition-delay: calc(var(--d, 0) * 1ms);
+}
+html.js [data-anim="fade"].in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Headline lines rise through a mask */
+.lines .ln {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+.lines .ln > span {
+  display: inline-block;
+}
+html.js [data-anim="lines"] .ln > span {
+  transform: translateY(108%);
+  transition: transform 1150ms var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 85ms + var(--d, 0) * 1ms);
+}
+html.js [data-anim="lines"].in .ln > span {
+  transform: none;
+}
+
+/* Children fade up in sequence */
+html.js [data-anim="stagger"] > * {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 800ms var(--ease-out), transform 1000ms var(--ease-out);
+}
+html.js [data-anim="stagger"].in > * {
+  opacity: 1;
+  transform: none;
+}
+html.js [data-anim="stagger"] > *:nth-child(2) { transition-delay: 80ms; }
+html.js [data-anim="stagger"] > *:nth-child(3) { transition-delay: 160ms; }
+html.js [data-anim="stagger"] > *:nth-child(4) { transition-delay: 240ms; }
+html.js [data-anim="stagger"] > *:nth-child(5) { transition-delay: 320ms; }
+html.js [data-anim="stagger"] > *:nth-child(6) { transition-delay: 400ms; }
+html.js [data-anim="stagger"] > *:nth-child(7) { transition-delay: 480ms; }
+html.js [data-anim="stagger"] > *:nth-child(8) { transition-delay: 560ms; }
+
+/* Images and video open with a clip-path reveal while the media settles in scale */
+html.js [data-anim="clip"] {
+  clip-path: inset(14% 0 0 0 round var(--radius-media));
+  transition: clip-path 1300ms var(--ease-out);
+  transition-delay: calc(var(--d, 0) * 1ms);
+}
+html.js [data-anim="clip"].in {
+  clip-path: inset(0 0 0 0 round var(--radius-media));
+}
+html.js [data-anim="clip"] .media-inner {
+  transform: scale(1.08);
+  transition: transform 1800ms var(--ease-out);
+  transition-delay: calc(var(--d, 0) * 1ms);
+}
+html.js [data-anim="clip"].in .media-inner {
+  transform: scale(1);
+}
+
+/* Lines draw themselves */
+html.js [data-anim="draw"] path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 1600ms var(--ease-out);
+  transition-delay: calc(var(--d, 0) * 1ms);
+}
+html.js [data-anim="draw"].in path {
+  stroke-dashoffset: 0;
+}
+
+/* Hold hero motion until the intro hands over */
+html[data-intro="play"] [data-anim="lines"] .ln > span {
+  transform: translateY(108%) !important;
+}
+html[data-intro="play"] [data-anim="fade"],
+html[data-intro="play"] [data-anim="stagger"] > * {
+  opacity: 0 !important;
+}
+html[data-intro="play"] [data-anim="clip"] {
+  clip-path: inset(14% 0 0 0 round var(--radius-media)) !important;
+}
+
+/* The smile mark under hero headlines draws itself once */
+.smile-draw path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: smile-draw 1100ms var(--ease-out) 600ms forwards;
+}
+html[data-intro="play"] .smile-draw path {
+  animation-play-state: paused;
+}
+@keyframes smile-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Slow, tasteful marquee */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  animation: marquee 60s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Scroll cue */
+@keyframes cue {
+  0% { transform: scaleY(0); transform-origin: top; }
+  45% { transform: scaleY(1); transform-origin: top; }
+  55% { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+.scroll-cue::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--color-navy);
+  animation: cue 2.4s var(--ease-settle) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+  .smile-draw path,
+  html.js [data-anim="draw"] path {
+    stroke-dashoffset: 0;
+  }
+  html.js [data-anim] ,
+  html.js [data-anim] > *,
+  html.js [data-anim] .ln > span,
+  html.js [data-anim] .media-inner {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+  }
+  .marquee-track {
+    animation: none;
+  }
+}
+
+@layer components {
+  .container-x {
+    width: 100%;
+    max-width: var(--max);
+    margin-inline: auto;
+    padding-inline: var(--pad);
+  }
+  @media (min-width: 1024px) {
+    .bleed-right {
+      margin-right: calc(-1 * (max(0px, (100vw - var(--max)) / 2) + var(--pad)));
+    }
+    .bleed-left {
+      margin-left: calc(-1 * (max(0px, (100vw - var(--max)) / 2) + var(--pad)));
+    }
+  }
+  .section {
+    padding-block: var(--section-y);
+  }
+
+  /* ---------------- Type scale ---------------- */
+  .t-hero,
+  .display {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(3rem, 1.35rem + 5.9vw, 6.75rem);
+    line-height: 0.96;
+    letter-spacing: -0.045em;
+    color: var(--color-navy-ink);
+  }
+  .display {
+    font-size: clamp(2.75rem, 1.4rem + 4.6vw, 5.5rem);
+    line-height: 0.98;
+    text-wrap: balance;
+  }
+  .t-mega {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2.6rem, 1.3rem + 4.4vw, 5.25rem);
+    line-height: 0.98;
+    letter-spacing: -0.042em;
+    color: var(--color-navy-ink);
+  }
+  .t-xl,
+  .h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2.2rem, 1.3rem + 3vw, 4rem);
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+    color: var(--color-navy-ink);
+    text-wrap: balance;
+  }
+  .t-lg {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.75rem, 1.25rem + 1.6vw, 3rem);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    color: var(--color-navy-ink);
+    text-wrap: balance;
+  }
+  .h3,
+  .t-md {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.3rem, 1.12rem + 0.6vw, 1.7rem);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--color-navy-ink);
+  }
+  .h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.0625rem;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    color: var(--color-navy-ink);
+  }
+  .eyebrow,
+  .kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-navy);
+  }
+  .eyebrow::before,
+  .kicker::before {
+    content: "";
+    width: 1.6rem;
+    height: 0.5rem;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 8'%3E%3Cpath d='M1.5 1.5 Q13 11 24.5 1.5' fill='none' stroke='%236ec1ec' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E")
+      no-repeat center / contain;
+  }
+  .eyebrow.no-mark::before {
+    display: none;
+  }
+  .on-dark .eyebrow,
+  .on-dark .kicker {
+    color: var(--color-smile);
+  }
+  .num {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+  .lede {
+    font-size: clamp(1.0625rem, 0.98rem + 0.4vw, 1.3rem);
+    line-height: 1.6;
+    color: var(--color-muted);
+    text-wrap: pretty;
+  }
+  .body-copy {
+    color: var(--color-muted);
+    text-wrap: pretty;
+  }
+  .micro {
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--color-muted);
+  }
+  .on-dark .t-hero,
+  .on-dark .t-mega,
+  .on-dark .t-xl,
+  .on-dark .t-lg,
+  .on-dark .t-md,
+  .on-dark .h2,
+  .on-dark .display,
+  .on-dark .h3,
+  .on-dark .h4 {
+    color: #fff;
+  }
+  .on-dark .lede,
+  .on-dark .body-copy {
+    color: #c6d4e8;
+  }
+  .on-dark .micro {
+    color: #9fb4d1;
+  }
+  .accent {
+    color: var(--color-navy);
+    opacity: 0.55;
+  }
+  .on-dark .accent {
+    color: var(--color-smile);
+    opacity: 1;
+  }
+
+  /* ---------------- Buttons ---------------- */
+  .btn {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 52px;
+    padding: 0.85rem 1.55rem;
+    border-radius: var(--radius-ui);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.975rem;
+    letter-spacing: -0.005em;
+    line-height: 1.1;
+    white-space: nowrap;
+    transition: color 350ms var(--ease-out), box-shadow 350ms var(--ease-out);
+  }
+  .btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 520ms var(--ease-out);
+  }
+  .btn:hover::before {
+    transform: scaleX(1);
+  }
+  .btn .arrow {
+    transition: transform 420ms var(--ease-out);
+  }
+  .btn:hover .arrow {
+    transform: translateX(5px);
+  }
+  .btn-primary {
+    background: var(--color-navy);
+    color: #fff;
+  }
+  .btn-primary::before {
+    background: var(--color-navy-ink);
+  }
+  .btn-secondary {
+    background: transparent;
+    color: var(--color-navy-ink);
+    box-shadow: inset 0 0 0 1.5px var(--color-line-strong);
+  }
+  .btn-secondary::before {
+    background: var(--color-smile-soft);
+  }
+  .btn-secondary:hover {
+    box-shadow: inset 0 0 0 1.5px var(--color-navy);
+  }
+  .btn-light {
+    background: #fff;
+    color: var(--color-navy-ink);
+  }
+  .btn-light::before {
+    background: var(--color-smile-soft);
+  }
+  .btn-outline-light {
+    color: #fff;
+    box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.45);
+  }
+  .btn-outline-light::before {
+    background: rgba(255, 255, 255, 0.12);
+  }
+  .btn-outline-light:hover {
+    box-shadow: inset 0 0 0 1.5px #fff;
+  }
+  .btn-sm {
+    min-height: 44px;
+    padding: 0.6rem 1.1rem;
+    font-size: 0.9rem;
+  }
+  @media (max-width: 479px) {
+    .btn {
+      white-space: normal;
+      text-align: center;
+      max-width: 100%;
+    }
+  }
+
+  /* Refined text link: underline grows, arrow nudges */
+  .link-smile {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 44px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--color-navy);
+  }
+  .link-smile > .label {
+    background: linear-gradient(currentColor, currentColor) no-repeat 0 100% / 100% 1.5px;
+    padding-bottom: 2px;
+    transition: background-size 420ms var(--ease-out);
+  }
+  .link-smile:hover > .label {
+    background-size: 0% 1.5px;
+    background-position: 100% 100%;
+  }
+  .link-smile .arrow {
+    transition: transform 420ms var(--ease-out);
+  }
+  .link-smile:hover .arrow {
+    transform: translateX(5px);
+  }
+  .on-dark .link-smile {
+    color: #fff;
+  }
+
+  /* Nav underline */
+  .nav-link {
+    position: relative;
+  }
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: 8px;
+    height: 1.5px;
+    background: var(--color-smile);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 420ms var(--ease-out);
+  }
+  .nav-link:hover::after,
+  .nav-link[aria-current="page"]::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  /* ---------------- Media ---------------- */
+  .media-frame {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-media);
+    isolation: isolate;
+    background: var(--color-mist);
+  }
+  .media-inner {
+    position: absolute;
+    inset: 0;
+  }
+  .zoom-on-hover .media-inner {
+    transition: transform 1200ms var(--ease-out);
+  }
+  .group:hover .zoom-on-hover .media-inner,
+  .zoom-on-hover:hover .media-inner {
+    transform: scale(1.035);
+  }
+  .media-ph {
+    background: linear-gradient(118deg, rgba(255, 255, 255, 0) 26%, rgba(255, 255, 255, 0.6) 38%, rgba(255, 255, 255, 0) 50%),
+      linear-gradient(180deg, #edf2f7 0%, #dfe8f1 100%);
+  }
+  .media-ph.tone-warm {
+    background: linear-gradient(118deg, rgba(255, 255, 255, 0) 26%, rgba(255, 255, 255, 0.6) 38%, rgba(255, 255, 255, 0) 50%),
+      linear-gradient(180deg, #f4f1ec 0%, #e8e4dd 100%);
+  }
+  .media-ph.tone-navy {
+    background: linear-gradient(180deg, #213f72 0%, #142c55 100%);
+  }
+  .shade-b::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(13, 31, 63, 0.72) 0%, rgba(13, 31, 63, 0.18) 45%, rgba(13, 31, 63, 0) 70%);
+    pointer-events: none;
+  }
+
+  /* Small floating card used over media */
+  .float-card {
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 16px;
+    box-shadow: 0 24px 60px -24px rgba(13, 31, 63, 0.35);
+  }
+
+  /* Fine grid detail */
+  .grid-lines {
+    background-image: linear-gradient(to right, var(--color-line) 1px, transparent 1px);
+    background-size: calc((100% - 1px) / 4) 100%;
+  }
+
+  /* Placeholders for content the clinic still needs to supply */
+  .pending {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.05rem 0.55rem;
+    border: 1px dashed var(--color-line-strong);
+    border-radius: 6px;
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--color-muted);
+    background: #fff;
+    line-height: 1.6;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+  .on-dark .pending {
+    background: rgba(255, 255, 255, 0.06);
+    color: #c6d4e8;
+    border-color: rgba(255, 255, 255, 0.35);
+  }
+  .claim-unconfirmed {
+    text-decoration: underline dashed var(--color-line-strong);
+    text-underline-offset: 5px;
+  }
+
+  /* Long-form text (legal pages, blog articles) */
+  .prose-sd {
+    color: var(--color-ink);
+    max-width: 68ch;
+  }
+  .prose-sd > * + * {
+    margin-top: 1.1em;
+  }
+  .prose-sd h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.5rem, 1.2rem + 1vw, 2.1rem);
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    color: var(--color-navy-ink);
+    margin-top: 2.2em;
+  }
+  .prose-sd h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--color-navy-ink);
+    margin-top: 1.8em;
+  }
+  .prose-sd p,
+  .prose-sd li {
+    color: #3b4757;
+  }
+  .prose-sd ul {
+    list-style: none;
+    padding: 0;
+  }
+  .prose-sd ul li {
+    position: relative;
+    padding-left: 1.4rem;
+  }
+  .prose-sd ul li + li {
+    margin-top: 0.5rem;
+  }
+  .prose-sd ul li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.72em;
+    width: 0.6rem;
+    height: 0.3rem;
+    border: 2px solid var(--color-smile);
+    border-top: 0;
+    border-radius: 0 0 0.6rem 0.6rem;
+  }
+  .prose-sd a {
+    color: var(--color-navy);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--color-smile);
+  }
+
+  /* Native details used in the mobile menu */
+  .faq-item summary {
+    list-style: none;
+    cursor: pointer;
+  }
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq-item .faq-icon {
+    transition: transform 300ms var(--ease-calm);
+  }
+  .faq-item[open] .faq-icon {
+    transform: rotate(45deg);
+  }
+
+  /* Smooth accordion (button + region) */
+  .acc-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 520ms var(--ease-out);
+  }
+  .acc-panel > div {
+    overflow: hidden;
+  }
+  .acc-item[data-open="true"] .acc-panel {
+    grid-template-rows: 1fr;
+  }
+  .acc-item .acc-icon {
+    transition: transform 420ms var(--ease-out), background-color 300ms;
+  }
+  .acc-item[data-open="true"] .acc-icon {
+    transform: rotate(45deg);
+  }
+
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -100px;
+    z-index: 200;
+    background: var(--color-navy);
+    color: #fff;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+  .skip-link:focus {
+    top: 1rem;
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Before/after slider: show focus on the visible handle */
+.ba-slider:has(.ba-input:focus-visible) .ba-handle {
+  outline: 2px solid var(--color-navy);
+  outline-offset: 3px;
+}
+
+/* Horizontal tracks that run to the right edge of the viewport on desktop */
+.bleed-track {
+  margin-inline: calc(-1 * var(--pad));
+  padding-inline: var(--pad);
+  scroll-padding-inline: var(--pad);
+}
+@media (min-width: 1024px) {
+  .bleed-track {
+    margin-right: calc(-1 * (max(0px, (100vw - var(--max)) / 2) + var(--pad)));
+  }
+}
+
+/* Two-column hairline grids: an odd last item spans the full row */
+@media (min-width: 640px) {
+  .hairline-grid > :last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Journey: each stage lights up as the progress line reaches it */
+.journey-step .journey-dot {
+  --on: clamp(0, (var(--p) - var(--at)) * 1000, 1);
+  background: color-mix(in srgb, var(--color-navy) calc(var(--on) * 100%), #fff);
+  color: color-mix(in srgb, #fff calc(var(--on) * 100%), var(--color-navy));
+}
+
+/* Intro film: fills the screen like a cover image on wide screens, and keeps the
+   whole logo visible (about 80% of the width) on tall phone screens. */
+.intro-video {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(max(100vw, 177.78vh), 176.8vw);
+  aspect-ratio: 16 / 9;
+  transform: translate(-50%, -50%);
+  background: #fff;
+}

@@ -1,0 +1,47 @@
+name: Build for Hostinger
+
+# Builds the static site and publishes it to the `hostinger` branch.
+# In Hostinger hPanel, point Git deployment at that branch with public_html as the directory.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: hostinger
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+        env:
+          NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
+          NEXT_PUBLIC_ALLOW_INDEXING: ${{ vars.NEXT_PUBLIC_ALLOW_INDEXING }}
+          NEXT_PUBLIC_PREVIEW_PLACEHOLDERS: ${{ vars.NEXT_PUBLIC_PREVIEW_PLACEHOLDERS }}
+          NEXT_PUBLIC_GA_ID: ${{ vars.NEXT_PUBLIC_GA_ID }}
+          NEXT_PUBLIC_BOOKING_ENDPOINT: ${{ vars.NEXT_PUBLIC_BOOKING_ENDPOINT }}
+
+      - name: Publish to hostinger branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./out
+          publish_branch: hostinger
+          force_orphan: true
+          enable_jekyll: true
+          commit_message: "Deploy ${{ github.sha }}"
